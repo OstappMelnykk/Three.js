@@ -1,5 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 
 @Component({
   selector: 'app-canvas-box',
@@ -21,7 +22,7 @@ export class CanvasBoxComponent implements OnInit {
 
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x3a34eb);
+    //scene.background = new THREE.Color(0xe232222);//0x3a34eb
 
     const canvasSizes = {
       width: window.innerWidth,
@@ -53,6 +54,26 @@ export class CanvasBoxComponent implements OnInit {
       renderer.setSize(canvasSizes.width, canvasSizes.height);
       renderer.render(scene, camera);
     });
+    const controls = new OrbitControls( camera, renderer.domElement );
+
+
+    const material = new THREE.MeshToonMaterial();
+
+
+
+
+    const box = new THREE.Mesh(
+      new THREE.BoxGeometry(1.5, 1.5, 1.5),
+      material
+    );
+
+    const torus = new THREE.Mesh(
+      new THREE.TorusGeometry(5, 1.5, 16, 100),
+      material
+    );
+
+    scene.add(torus, box);
+
 
     const animate = () => {
       renderer.render(scene, camera);
