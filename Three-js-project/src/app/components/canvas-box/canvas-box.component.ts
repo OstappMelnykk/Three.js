@@ -71,8 +71,26 @@ export class CanvasBoxComponent implements OnInit {
 
     const gui = new dat.GUI();
 
+    const options = {
+      sphereColor: "#ffea00",
+      wireframe: true,
+      speed: 0.01
+    }
+
+    gui.addColor(options, 'sphereColor')
+      .onChange(function (e){
+        sphere.material.color.set(e)
+      })
+
+    gui.add(options, 'wireframe').onChange(function (e){
+      sphere.material.wireframe = e
+    })
+
+    gui.add(options, 'speed', 0, 0.1)
 
 
+    let step = 0
+    let speed = 0.01;
 
 
 
@@ -80,6 +98,9 @@ export class CanvasBoxComponent implements OnInit {
 
     function animate(){
       box.rotation.x += 0.01;
+
+      step += options.speed
+      sphere.position.y = 10 * Math.abs(Math.sin(step))
       renderer.render(scene, camera);
     }
 
