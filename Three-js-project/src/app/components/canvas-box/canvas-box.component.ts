@@ -18,6 +18,9 @@ export class CanvasBoxComponent implements OnInit {
   createThreeJsBox(): void
   {
     const renderer = new THREE.WebGLRenderer()
+
+    renderer.shadowMap.enabled = true;
+
     renderer.setSize(window.innerWidth, window.innerHeight);
     renderer.setClearColor(0xe232222, 1);
     document.body.appendChild(renderer.domElement);
@@ -55,6 +58,7 @@ export class CanvasBoxComponent implements OnInit {
     const plane = new THREE.Mesh(planeGeometry, planeMaterial)
     scene.add(plane)
     plane.rotation.x = -Math.PI / 2;
+    plane.receiveShadow = true
 
     const gridHelper = new THREE.GridHelper(30, 10)
     scene.add(gridHelper)
@@ -68,7 +72,7 @@ export class CanvasBoxComponent implements OnInit {
     scene.add(sphere)
 
     sphere.position.set(-10, 10, 0)
-
+    sphere.castShadow = true
 
     const ambientLight = new THREE.AmbientLight(0x333333, 1)
     scene.add(ambientLight)
@@ -76,9 +80,19 @@ export class CanvasBoxComponent implements OnInit {
     const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8)
     scene.add(directionalLight)
     directionalLight.position.set(-30, 50, 0)
+    directionalLight.castShadow = true
+    directionalLight.shadow.camera.bottom = -12
+
+
 
     const dLightHelper = new THREE.DirectionalLightHelper(directionalLight)
     scene.add(dLightHelper)
+
+
+///////////////////////////////////////////////////////
+    const dLightShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera)
+    scene.add(dLightShadowHelper)
+///////////////////////////////////////////////////////
 
 
 
