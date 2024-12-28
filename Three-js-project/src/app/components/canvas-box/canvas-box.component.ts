@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
+import * as dat from 'dat.gui'
 
 @Component({
   selector: 'app-canvas-box',
@@ -67,6 +68,15 @@ export class CanvasBoxComponent implements OnInit {
     scene.add(sphere)
 
     sphere.position.set(-10, 10, 0)
+
+    const gui = new dat.GUI();
+
+
+
+
+
+
+
 
     function animate(){
       box.rotation.x += 0.01;
