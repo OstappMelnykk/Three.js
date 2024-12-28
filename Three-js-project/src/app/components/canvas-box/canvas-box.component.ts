@@ -22,7 +22,7 @@ export class CanvasBoxComponent implements OnInit {
     renderer.shadowMap.enabled = true;
 
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setClearColor(0xe232222, 1);
+    renderer.setClearColor(0xFFEA00);
     document.body.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
@@ -40,14 +40,20 @@ export class CanvasBoxComponent implements OnInit {
     const axesHelper = new THREE.AxesHelper(5)
     scene.add(axesHelper)
 
+    const textureloader = new THREE.TextureLoader();
 
     const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
     const boxMaterial = new THREE.MeshBasicMaterial({
       color: 0x00FF00,
       //wireframe: true
+      map: textureloader.load('/assets/imgs/wall_texture.jpg'),
     })
+
+
     const box = new THREE.Mesh(boxGeometry, boxMaterial)
     scene.add(box)
+    box.castShadow = true
+    box.position.y = 2
 
     const planeGeometry = new THREE.PlaneGeometry(30, 30)
     const planeMaterial = new THREE.MeshStandardMaterial({
@@ -74,18 +80,19 @@ export class CanvasBoxComponent implements OnInit {
     sphere.position.set(-10, 10, 0)
     sphere.castShadow = true
 
-    const ambientLight = new THREE.AmbientLight(0x333333, 1)
-    scene.add(ambientLight)
+    const ambientLight = new THREE.AmbientLight(0x333333);
+    scene.add(ambientLight);
 
-    const spotLight = new THREE.SpotLight(0xFFFFFF, 10000)
-    scene.add(spotLight)
+    const spotLight = new THREE.SpotLight(0xFFFFFF, 100);
+    spotLight.angle = 0.04
+    scene.add(spotLight);
+    spotLight.position.set(-10, 10, 0);
+    spotLight.castShadow = true;
+    spotLight.angle = 0.2;
 
-    spotLight.position.set(-100, 100, 0)
-    spotLight.castShadow = true
-    spotLight.angle = 0.07
+    const sLightHelper = new THREE.SpotLightHelper(spotLight);
+    scene.add(sLightHelper);
 
-    const sLightHelper = new THREE.SpotLightHelper(spotLight)
-    scene.add(sLightHelper)
 
 
     const gui = new dat.GUI();
@@ -112,25 +119,22 @@ export class CanvasBoxComponent implements OnInit {
 
     gui.add(options, 'angle', 0, 1)
     gui.add(options, 'penumbra', 0, 1)
-    gui.add(options, 'intensity', 0, 1)
-
-
-
-
-
+    gui.add(options, 'intensity', 0, 500)
 
 
     let step = 0
 
     function animate(){
       box.rotation.x += 0.01;
+      box.rotation.y += 0.01;
+      box.rotation.z += 0.01;
 
       step += options.speed
       sphere.position.y = 10 * Math.abs(Math.sin(step))
 
       spotLight.angle = options.angle
       spotLight.penumbra = options.penumbra
-      spotLight.intensity += options.intensity
+      spotLight.intensity = options.intensity
 
       sLightHelper.update()
 
