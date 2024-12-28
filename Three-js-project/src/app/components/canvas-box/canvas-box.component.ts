@@ -24,25 +24,52 @@ export class CanvasBoxComponent implements OnInit {
     const scene = new THREE.Scene();
 
     const camera = new THREE.PerspectiveCamera(
-      75,
+      45,
       window.innerWidth / window.innerHeight,
       0.1,
       1000
     );
     const orbit = new OrbitControls( camera, renderer.domElement );
-    camera.position.set(0, 2, 5)
+    camera.position.set(-5, 15, 15)
     orbit.update();
 
     const axesHelper = new THREE.AxesHelper(5)
     scene.add(axesHelper)
 
 
-    const boxGeometry = new THREE.BoxGeometry()
-    const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00})
+    const boxGeometry = new THREE.BoxGeometry(2, 2, 2)
+    const boxMaterial = new THREE.MeshBasicMaterial({
+      color: 0x00FF00,
+      //wireframe: true
+    })
     const box = new THREE.Mesh(boxGeometry, boxMaterial)
     scene.add(box)
 
+    const planeGeometry = new THREE.PlaneGeometry(30, 30)
+    const planeMaterial = new THREE.MeshBasicMaterial({
+      color: 0xFFFFFF,
+      side: THREE.DoubleSide
+    })
+
+    const plane = new THREE.Mesh(planeGeometry, planeMaterial)
+    scene.add(plane)
+    plane.rotation.x = -Math.PI / 2;
+
+    const gridHelper = new THREE.GridHelper(30, 10)
+    scene.add(gridHelper)
+
+    const sphereGeometry = new THREE.SphereGeometry(4, 50, 50)
+    const sphereMaterial = new THREE.MeshBasicMaterial({
+      color: 0x0000FF,
+      wireframe: true
+    })
+    const sphere = new THREE.Mesh(sphereGeometry, sphereMaterial)
+    scene.add(sphere)
+
+    sphere.position.set(-10, 10, 0)
+
     function animate(){
+      box.rotation.x += 0.01;
       renderer.render(scene, camera);
     }
 
