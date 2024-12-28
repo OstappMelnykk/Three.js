@@ -44,7 +44,7 @@ export class CanvasBoxComponent implements OnInit {
 
     const boxGeometry = new THREE.BoxGeometry(1, 1, 1)
     const boxMaterial = new THREE.MeshBasicMaterial({
-      color: 0x00FF00,
+      //02olor: 0x00FF00,
       //wireframe: true
       map: textureloader.load('/assets/imgs/wall_texture.jpg'),
     })
@@ -125,9 +125,9 @@ export class CanvasBoxComponent implements OnInit {
     let step = 0
 
     function animate(){
-      box.rotation.x += 0.01;
-      box.rotation.y += 0.01;
-      box.rotation.z += 0.01;
+      box.rotation.x += 0.002;
+      box.rotation.y += 0.002;
+      box.rotation.z += 0.002;
 
       step += options.speed
       sphere.position.y = 10 * Math.abs(Math.sin(step))
