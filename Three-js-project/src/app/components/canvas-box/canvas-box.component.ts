@@ -14,72 +14,38 @@ export class CanvasBoxComponent implements OnInit {
     this.createThreeJsBox();
   }
 
-  createThreeJsBox(): void {
-    const canvas = document.getElementById('canvas-box');
-
-    if (!canvas)
-      return;
-
+  createThreeJsBox(): void
+  {
+    const renderer = new THREE.WebGLRenderer()
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    renderer.setClearColor(0xe232222, 1);
+    document.body.appendChild(renderer.domElement);
 
     const scene = new THREE.Scene();
-    //scene.background = new THREE.Color(0xe232222);//0x3a34eb
-
-    const canvasSizes = {
-      width: window.innerWidth,
-      height: window.innerHeight,
-    };
 
     const camera = new THREE.PerspectiveCamera(
       75,
-      canvasSizes.width / canvasSizes.height,
-      0.001,
+      window.innerWidth / window.innerHeight,
+      0.1,
       1000
     );
-    camera.position.z = 30;
-    scene.add(camera);
+    const orbit = new OrbitControls( camera, renderer.domElement );
+    camera.position.set(0, 2, 5)
+    orbit.update();
+
+    const axesHelper = new THREE.AxesHelper(5)
+    scene.add(axesHelper)
 
 
+    const boxGeometry = new THREE.BoxGeometry()
+    const boxMaterial = new THREE.MeshBasicMaterial({color: 0x00FF00})
+    const box = new THREE.Mesh(boxGeometry, boxMaterial)
+    scene.add(box)
 
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas });
-    renderer.setClearColor(0xe232222, 1);
-    renderer.setSize(canvasSizes.width, canvasSizes.height);
-
-    window.addEventListener('resize', () => {
-      canvasSizes.width = window.innerWidth;
-      canvasSizes.height = window.innerHeight;
-
-      camera.aspect = canvasSizes.width / canvasSizes.height;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(canvasSizes.width, canvasSizes.height);
+    function animate(){
       renderer.render(scene, camera);
-    });
-    const controls = new OrbitControls( camera, renderer.domElement );
+    }
 
-
-    const material = new THREE.MeshToonMaterial();
-
-
-
-
-    const box = new THREE.Mesh(
-      new THREE.BoxGeometry(1.5, 1.5, 1.5),
-      material
-    );
-
-    const torus = new THREE.Mesh(
-      new THREE.TorusGeometry(5, 1.5, 16, 100),
-      material
-    );
-
-    scene.add(torus, box);
-
-
-    const animate = () => {
-      renderer.render(scene, camera);
-      window.requestAnimationFrame(animate);
-    };
-
-    animate();
+    renderer.setAnimationLoop(animate);
   }
 }
