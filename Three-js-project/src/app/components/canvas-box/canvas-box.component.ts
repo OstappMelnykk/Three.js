@@ -73,11 +73,12 @@ export class CanvasBoxComponent implements OnInit {
     const ambientLight = new THREE.AmbientLight(0x333333, 1)
     scene.add(ambientLight)
 
+    const directionalLight = new THREE.DirectionalLight(0xFFFFFF, 0.8)
+    scene.add(directionalLight)
+    directionalLight.position.set(-30, 50, 0)
 
-
-
-
-
+    const dLightHelper = new THREE.DirectionalLightHelper(directionalLight)
+    scene.add(dLightHelper)
 
 
 
