@@ -47,7 +47,7 @@ export class CanvasBoxComponent implements OnInit {
     scene.add(box)
 
     const planeGeometry = new THREE.PlaneGeometry(30, 30)
-    const planeMaterial = new THREE.MeshBasicMaterial({
+    const planeMaterial = new THREE.MeshStandardMaterial({
       color: 0xFFFFFF,
       side: THREE.DoubleSide
     })
@@ -60,7 +60,7 @@ export class CanvasBoxComponent implements OnInit {
     scene.add(gridHelper)
 
     const sphereGeometry = new THREE.SphereGeometry(4, 50, 50)
-    const sphereMaterial = new THREE.MeshBasicMaterial({
+    const sphereMaterial = new THREE.MeshStandardMaterial({
       color: 0x0000FF,
       wireframe: true
     })
@@ -68,6 +68,18 @@ export class CanvasBoxComponent implements OnInit {
     scene.add(sphere)
 
     sphere.position.set(-10, 10, 0)
+
+
+    const ambientLight = new THREE.AmbientLight(0x333333, 1)
+    scene.add(ambientLight)
+
+
+
+
+
+
+
+
 
     const gui = new dat.GUI();
 
