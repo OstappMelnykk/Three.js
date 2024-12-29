@@ -8,3 +8,18 @@
 //  height: 100vh;
 //  display: block;
 //}
+
+#debug {
+  font-family: monospace;
+  font-size: larger;
+  position: absolute;
+  left: 0px;
+  top: 50px;
+  border: 1px solid red;
+  padding: 10px;
+  width: 220px;
+  height: 220px;
+  color: white;
+  pointer-events: none;
+  margin-left: 10px;
+}
