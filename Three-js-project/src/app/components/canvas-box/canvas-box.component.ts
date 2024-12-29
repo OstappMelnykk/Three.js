@@ -51,9 +51,11 @@ export class CanvasBoxComponent implements OnInit
 
     const gui = new GUI()
 
-    gui.add(cube.rotation, "x", 0, Math.PI * 2)
-    gui.add(cube.rotation, "y", 0, Math.PI * 2)
-    gui.add(cube.rotation, "z", 0, Math.PI * 2)
+    const cubeFolder = gui.addFolder("cube")
+    cubeFolder.add(cube.rotation, "x", 0, Math.PI * 2)
+    cubeFolder.add(cube.rotation, "y", 0, Math.PI * 2)
+    cubeFolder.add(cube.rotation, "z", 0, Math.PI * 2)
+    cubeFolder.open()
 
 
     function animate() {
