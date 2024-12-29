@@ -35,12 +35,95 @@ export class CanvasBoxComponent implements OnInit
 
     new OrbitControls(camera, renderer.domElement)
 
-    const cube = new THREE.Mesh(
-      new THREE.BoxGeometry(),
-      new THREE.MeshNormalMaterial({ wireframe: true })
-    )
+//////////////////////////////////////////////////////////////////
 
-    scene.add(cube)
+    //build in geometry
+
+    // const cube = new THREE.Mesh(
+    //   new THREE.BoxGeometry(),
+    //   new THREE.MeshNormalMaterial({ wireframe: true })
+    // )
+    //
+    // scene.add(cube)
+
+//////////////////////////////////////////////////////////////////
+
+    //cusom line geometry
+
+    /*const points = [
+      new THREE.Vector3(-1, 0, 0),
+      new THREE.Vector3(1, 0, 0),
+    ]
+
+    let geometry = new THREE.BufferGeometry().setFromPoints(points)
+
+    let line = new THREE.Line(
+      geometry,
+      new THREE.LineBasicMaterial({
+        color: 0x888888
+      }))
+
+    line.position.set(0, 1, 1)
+    scene.add(line)
+    */
+
+//////////////////////////////////////////////////////////////////
+
+    // const geometry = new THREE.BufferGeometry();
+    //
+    // const vertices = new Float32Array( [
+    //   -1.0, -1.0,  1.0, // v0
+    //   1.0, -1.0,  1.0, // v1
+    //   1.0,  1.0,  1.0, // v2
+    //
+    //   1.0,  1.0,  1.0, // v3
+    //   -1.0,  1.0,  1.0, // v4
+    //   -1.0, -1.0,  1.0  // v5
+    // ] );
+    //
+    // geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    //
+    // const mesh = new THREE.Mesh(
+    //   geometry,
+    //   new THREE.MeshBasicMaterial( { color: 0xff0000, wireframe: true }));
+
+
+//////////////////////////////////////////////////////////////////
+
+
+    const geometry = new THREE.BufferGeometry();
+
+    const vertices = new Float32Array( [
+      -1.0, -1.0,  1.0, // v0
+      1.0, -1.0,  1.0, // v1
+      1.0,  1.0,  1.0, // v2
+      -1.0,  1.0,  1.0, // v3
+    ] );
+
+    const indices = [
+      0, 1, 2,
+      2, 3, 0,
+    ];
+
+    geometry.setIndex( indices );
+    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+
+    const material = new THREE.MeshBasicMaterial( {
+      color: 0xff0000,
+      wireframe: true
+    });
+    const mesh = new THREE.Mesh( geometry, material );
+
+
+    scene.add( mesh );
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+
+
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight
