@@ -24,6 +24,10 @@ export class CanvasBoxComponent implements OnInit
   createThreeJsBox(): void
   {
     const scene = new THREE.Scene()
+    //scene.background = new THREE.Color(0xffffff);
+    //scene.background = new THREE.TextureLoader().load('https://sbcode.net/img/grid.png');
+    scene.background = new THREE.CubeTextureLoader().setPath('https://sbcode.net/img/').load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png'])
+    scene.backgroundBlurriness = 0.5
 
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000)
     camera.position.z = 1.5
