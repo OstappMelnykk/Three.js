@@ -2,6 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import {GUI} from 'dat.gui'
+
 
 @Component({
   selector: 'app-canvas-box',
@@ -46,6 +48,13 @@ export class CanvasBoxComponent implements OnInit
 
     const stats = new Stats()
     document.body.appendChild(stats.dom)
+
+    const gui = new GUI()
+
+    gui.add(cube.rotation, "x", 0, Math.PI * 2)
+    gui.add(cube.rotation, "y", 0, Math.PI * 2)
+    gui.add(cube.rotation, "z", 0, Math.PI * 2)
+
 
     function animate() {
       requestAnimationFrame(animate)
