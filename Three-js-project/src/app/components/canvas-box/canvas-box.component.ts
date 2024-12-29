@@ -28,27 +28,25 @@ export class CanvasBoxComponent implements OnInit
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
     const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
     renderer.setSize(canvas.clientWidth, canvas.clientHeight)
-    //document.body.appendChild(renderer.domElement)
 
 
     const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000)
     camera.position.z = 1.5
 
-
-
-/*
-
     window.addEventListener('resize', () => {
-      camera.aspect = canvas.clientWidth / canvas.clientHeight
+      camera.aspect = window.innerWidth / window.innerHeight
       camera.updateProjectionMatrix()
-      renderer.setSize(canvas.clientWidth, canvas.clientHeight)
+      renderer.setSize(window.innerWidth, window.innerHeight)
+      renderer.render(scene, camera)
     })
 
-*/
+    const controls = new OrbitControls(camera, renderer.domElement)
+    controls.addEventListener("change", function(event: any) {
+      renderer.render(scene, camera)
+    })
+    const stats = new Stats()
+    document.body.appendChild(stats.dom)
 
-
-
-    new OrbitControls(camera, renderer.domElement)
 
     const geometry = new THREE.BoxGeometry()
     const material = new THREE.MeshNormalMaterial({ wireframe: true })
@@ -56,12 +54,13 @@ export class CanvasBoxComponent implements OnInit
     const cube = new THREE.Mesh(geometry, material)
     scene.add(cube)
 
-    function animate() {
-      requestAnimationFrame(animate)
 
-      renderer.render(scene, camera)
+    function animate(){
+      requestAnimationFrame(animate)
+      stats.update()
     }
 
     animate()
+    renderer.render(scene, camera)
   }
 }
