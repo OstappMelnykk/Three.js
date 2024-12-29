@@ -26,7 +26,7 @@ export class CanvasBoxComponent implements OnInit
     const scene = new THREE.Scene()
 
     const canvas = document.getElementById('canvas') as HTMLCanvasElement
-    const renderer = new THREE.WebGLRenderer({ canvas: canvas })
+    const renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true })
     renderer.setSize(canvas.clientWidth, canvas.clientHeight)
     //document.body.appendChild(renderer.domElement)
 
