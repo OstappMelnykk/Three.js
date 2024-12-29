@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
-import * as dat from 'dat.gui'
+import Stats from "three/examples/jsm/libs/stats.module.js";
 
 @Component({
   selector: 'app-canvas-box',
@@ -36,19 +36,26 @@ export class CanvasBoxComponent implements OnInit
       renderer.setSize(window.innerWidth, window.innerHeight)
     })
 
+    new OrbitControls(camera, renderer.domElement)
+
     const geometry = new THREE.BoxGeometry()
     const material = new THREE.MeshNormalMaterial({ wireframe: true })
 
     const cube = new THREE.Mesh(geometry, material)
     scene.add(cube)
 
+    const stats = new Stats()
+    document.body.appendChild(stats.dom)
+
     function animate() {
       requestAnimationFrame(animate)
 
-      cube.rotation.x += 0.01
-      cube.rotation.y += 0.01
+      //cube.rotation.x += 0.01
+      //cube.rotation.y += 0.01
 
       renderer.render(scene, camera)
+
+      stats.update()
     }
 
     animate()
