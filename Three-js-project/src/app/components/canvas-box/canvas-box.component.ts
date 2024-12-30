@@ -3,7 +3,9 @@ import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {GUI} from 'dat.gui'
-
+import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
+import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
+import { Line2 } from 'three/examples/jsm/lines/Line2.js';
 /*
     /addons/
     /examples/jsm/
@@ -46,52 +48,38 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    function twist(geometry: THREE.BufferGeometry, factor: number) {
-      const q = new THREE.Quaternion()
-      const up = new THREE.Vector3(0, 1, 0)
-      const p = geometry.attributes['position'].array
+    const positions =  new Float32Array([
+      -1, -1, 0,  // Нижній лівий
+      1, -1, 0,  // Нижній правий
+      1,  1, 0,  // Верхній правий
+      -1,  1, 0,  // Верхній лівий
+    ]);
 
-      for (let i = 0; i < p.length; i += 3) {
-        q.setFromAxisAngle(up, p[i + 1] * factor)
+    const geometry = new LineGeometry();
 
-        let vec = new THREE.Vector3(p[i], p[i + 1], p[i + 2])
-        vec.applyQuaternion(q)
+   // (p1 p2) -> (p2 p3) -> (p3 p4)
+    geometry.setPositions(positions);
 
-        p[i] = vec.x
-        p[i + 2] = vec.z
-      }
+    const material = new LineMaterial({
+      color: 0xff0000, // Червоний колір
+      linewidth: 20,    // Товщина ліній
+    });
 
-      geometry.computeVertexNormals()
-      geometry.attributes['position'].needsUpdate = true
-    }
+// Задаємо роздільну здатність (обов’язково для LineMaterial)
+    material.resolution.set(window.innerWidth, window.innerHeight);
 
-    let geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10)
+// Створюємо об'єкт Line2 і додаємо до сцени
+    const line = new Line2(geometry, material);
+    scene.add(line);
 
-    twist(geometry, Math.PI / 2)
 
-    const twistedCube = new THREE.Mesh(
-      geometry,
-      new THREE.MeshNormalMaterial({ wireframe: true })
-    )
-
-    scene.add(twistedCube)
-
-    const data = {
-      t: Math.PI / 2
-    }
 
     const gui = new GUI()
-    gui.add(data, 't', -Math.PI, Math.PI, 0.01).onChange((t) => {
-      twistedCube.geometry.dispose()
-      geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10)
-      twist(geometry, t)
-      twistedCube.geometry = geometry
-    })
-    gui.open()
-
-
-
-
+    gui.add(material, "linewidth", 0.01, 100)
+    gui.addColor({ color: material.color.getHex() }, "color");
+    // gui.addColor({ color: material.color.getHex() }, "color").onChange((value) => {
+    //   material.color.set(value);
+    // });
 
 
 
