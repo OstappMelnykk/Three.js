@@ -2,7 +2,6 @@ import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import {TeapotGeometry} from "three/examples/jsm/geometries/TeapotGeometry.js";
 import {GUI} from 'dat.gui'
 
 /*
@@ -40,14 +39,24 @@ export class CanvasBoxComponent implements OnInit
 
     new OrbitControls(camera, renderer.domElement)
 
+    const stats = new Stats()
+    document.body.appendChild(stats.dom)
 
-// Створення геометрії чайника
-    const geometry = new TeapotGeometry(1, 8); // Розмір 1, кількість сегментів 8
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
-// Створення об'єкта Mesh
-    const mesh = new THREE.Mesh(geometry, material);
-    scene.add(mesh);
+
+    const points = [];
+
+    points.push(new THREE.Vector3(-1, -1, 0)); // Перша точка
+    points.push(new THREE.Vector3(1, -1, 0));  // Друга точка
+    points.push(new THREE.Vector3(1, 1, 0));   // Третя точка
+    points.push(new THREE.Vector3(-1, 1, 0));  // Четверта точка
+
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
+
+    const line = new THREE.Line(geometry, material);
+    scene.add(line);
+
 
 
     window.addEventListener('resize', () => {
@@ -59,6 +68,7 @@ export class CanvasBoxComponent implements OnInit
     function animate() {
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
+      stats.update()
     }
     animate()
   }
