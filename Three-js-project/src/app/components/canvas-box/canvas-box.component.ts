@@ -48,38 +48,25 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const positions =  new Float32Array([
-      -1, -1, 0,  // Нижній лівий
-      1, -1, 0,  // Нижній правий
-      1,  1, 0,  // Верхній правий
-      -1,  1, 0,  // Верхній лівий
-    ]);
+    const dynamicPositions = [
+      -1, -1, 0,
+      1, -1, 0,
+      1,  1, 0
+    ];
 
-    const geometry = new LineGeometry();
+    const dynamicGeometry = new LineGeometry();
+    dynamicGeometry.setPositions(dynamicPositions);
 
-   // (p1 p2) -> (p2 p3) -> (p3 p4)
-    geometry.setPositions(positions);
-
-    const material = new LineMaterial({
-      color: 0xff0000, // Червоний колір
-      linewidth: 20,    // Товщина ліній
+    const dynamicMaterial = new LineMaterial({
+      color: 0x00ff00,
+      linewidth: 3
     });
 
-// Задаємо роздільну здатність (обов’язково для LineMaterial)
-    material.resolution.set(window.innerWidth, window.innerHeight);
+    dynamicMaterial.resolution.set(window.innerWidth, window.innerHeight);
 
-// Створюємо об'єкт Line2 і додаємо до сцени
-    const line = new Line2(geometry, material);
-    scene.add(line);
+    const dynamicLine = new Line2(dynamicGeometry, dynamicMaterial);
+    scene.add(dynamicLine);
 
-
-
-    const gui = new GUI()
-    gui.add(material, "linewidth", 0.01, 100)
-    gui.addColor({ color: material.color.getHex() }, "color");
-    // gui.addColor({ color: material.color.getHex() }, "color").onChange((value) => {
-    //   material.color.set(value);
-    // });
 
 
 
@@ -93,6 +80,8 @@ export class CanvasBoxComponent implements OnInit
     function animate() {
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
+      dynamicPositions[3] = Math.sin(Date.now() * 0.001) * 2; // Коливаємо точку
+      dynamicGeometry.setPositions(dynamicPositions);
       stats.update()
     }
     animate()
