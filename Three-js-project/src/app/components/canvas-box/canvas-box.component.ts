@@ -69,29 +69,21 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const loader = new GLTFLoader();
-    loader.load(
+    // Створення форми (наприклад, серце)
+    const heartShape = new THREE.Shape();
+    heartShape.moveTo(5, 5);
+    heartShape.bezierCurveTo(5, 5, 4, 0, 0, 0);
+    heartShape.bezierCurveTo(-6, 0, -6, 7, -6, 7);
+    heartShape.bezierCurveTo(-6, 11, -3, 15.4, 5, 19);
+    heartShape.bezierCurveTo(12, 15.4, 16, 11, 16, 7);
+    heartShape.bezierCurveTo(16, 7, 16, 0, 10, 0);
+    heartShape.bezierCurveTo(7, 0, 5, 5, 5, 5);
 
-      '/assets/GLTF_3D_Models/Lion guarding chinatown.glb',
-      (gltf) => {
-        scene.add(gltf.scene);
-
-        // Manipulating the object after it's loaded
-        const model = gltf.scene;
-
-        model.position.set(0, 0, 0);
-        model.scale.set(4, 4, 4);
-        model.rotation.set(Math.PI / 8, 0, 0);
-
-
-      },
-      (xhr) => {
-        console.log((xhr.loaded / xhr.total * 100) + '% завантажено');
-      },
-      (error) => {
-        console.error('Сталася помилка при завантаженні GLTF:', error);
-      }
-    );
+// Створення геометрії з форми
+    const geometry = new THREE.ShapeGeometry(heartShape);
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, side: THREE.DoubleSide });
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
 
 
 
