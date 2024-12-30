@@ -124,49 +124,74 @@ export class CanvasBoxComponent implements OnInit
 //////////////////////////////////////////////////////////////////
 
 
-    //додавання кольорів до вершин
+//     //додавання кольорів до вершин
+//
+//
+//     const vertices = new Float32Array([
+//       0, 1, 0,   // Верхня вершина
+//       -1, -1, 0,  // Ліва нижня вершина
+//       1, -1, 0   // Права нижня вершина
+//     ]);
+//
+// // Кольори
+//     const colors = new Float32Array([
+//       1, 0, 0,  // Червоний (для верхньої вершини)
+//       0, 1, 0,  // Зелений (для лівої вершини)
+//       0, 0, 1   // Синій (для правої вершини)
+//     ]);
+//
+// // Геометрія
+//     const geometry = new THREE.BufferGeometry();
+//     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+//     geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+//
+// // Матеріал
+//     const material = new THREE.MeshBasicMaterial({
+//       vertexColors: true, // Використовувати кольори вершин
+//       side: THREE.DoubleSide
+//     });
+//
+// // Сітка
+//     const triangle = new THREE.Mesh(geometry, material);
+//     scene.add(triangle);
 
 
+
+//////////////////////////////////////////////////////////////////
+
+
+
+
+// Вершини п'ятикутника
     const vertices = new Float32Array([
-      0, 1, 0,   // Верхня вершина
-      -1, -1, 0,  // Ліва нижня вершина
-      1, -1, 0   // Права нижня вершина
+      0, 1, 0,    // Верхня точка
+      -0.95, 0.31, 0, // Ліва верхня точка
+      -0.59, -0.81, 0, // Ліва нижня точка
+      0.59, -0.81, 0,  // Права нижня точка
+      0.95, 0.31, 0    // Права верхня точка
     ]);
 
-// Кольори
-    const colors = new Float32Array([
-      1, 0, 0,  // Червоний (для верхньої вершини)
-      0, 1, 0,  // Зелений (для лівої вершини)
-      0, 0, 1   // Синій (для правої вершини)
-    ]);
+// Індекси для створення трикутників
+    const indices = [
+      0, 1, 4, // Верхній трикутник
+      1, 2, 4, // Лівий нижній трикутник
+      2, 3, 4  // Правий нижній трикутник
+    ];
 
 // Геометрія
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
-    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+    geometry.setIndex(indices);
 
 // Матеріал
     const material = new THREE.MeshBasicMaterial({
-      vertexColors: true, // Використовувати кольори вершин
+      color: 0x00ff00,
       side: THREE.DoubleSide
     });
 
 // Сітка
-    const triangle = new THREE.Mesh(geometry, material);
-    scene.add(triangle);
-
-
-
-
-
-
-
-
-
-
-
-
-
+    const pentagon = new THREE.Mesh(geometry, material);
+    scene.add(pentagon);
 
 
 
