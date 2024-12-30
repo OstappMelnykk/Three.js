@@ -69,16 +69,21 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-
-// Створення завантажувача GLTF
     const loader = new GLTFLoader();
-
-// Завантаження GLTF
     loader.load(
 
-      '/assets/GLTF_3D_Models/Lion guarding chinatown.glb', // Шлях до файлу GLTF
+      '/assets/GLTF_3D_Models/Lion guarding chinatown.glb',
       (gltf) => {
         scene.add(gltf.scene);
+
+        // Manipulating the object after it's loaded
+        const model = gltf.scene;
+
+        model.position.set(0, 0, 0);
+        model.scale.set(4, 4, 4);
+        model.rotation.set(Math.PI / 8, 0, 0);
+
+
       },
       (xhr) => {
         console.log((xhr.loaded / xhr.total * 100) + '% завантажено');
