@@ -2,10 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
-import {GUI} from 'dat.gui'
-import { LineGeometry } from 'three/examples/jsm/lines/LineGeometry.js';
-import { LineMaterial } from 'three/examples/jsm/lines/LineMaterial.js';
-import { Line2 } from 'three/examples/jsm/lines/Line2.js';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+
+
 /*
     /addons/
     /examples/jsm/
@@ -48,28 +47,47 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const geometry = new THREE.BufferGeometry();
-    const vertices = new Float32Array([
-      // Вершини точок
-      0, 0, 0,
-      1, 1, 1,
-      -1, -1, -1,
-    ]);
-    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-// Створення матеріалу для точок
-    const material = new THREE.PointsMaterial({
-      color: 0x00ff00, // зелений колір
-      size: 0.1, // розмір точок
-      transparent: true, // прозорість
-      blending: THREE.AdditiveBlending, // режим змішування
-      depthTest: false, // вимкнення тесту глибини
-      sizeAttenuation: true, // зміна розміру точок залежно від відстані
-    });
 
-// Створення об'єкта точок
-    const points = new THREE.Points(geometry, material);
-    scene.add(points);
+
+
+
+
+
+    // Create lights
+    const ambientLight = new THREE.AmbientLight(0x404040, 1);  // Soft white light
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 1);  // Main directional light (e.g., sunlight)
+    directionalLight.position.set(5, 10, 7);  // Adjust position for better illumination
+    scene.add(directionalLight);
+
+    const pointLight = new THREE.PointLight(0xff0000, 1, 10);  // Red point light
+    pointLight.position.set(0, 2, 3);
+    scene.add(pointLight);
+
+
+
+
+
+// Створення завантажувача GLTF
+    const loader = new GLTFLoader();
+
+// Завантаження GLTF
+    loader.load(
+
+      '/assets/GLTF_3D_Models/Lion guarding chinatown.glb', // Шлях до файлу GLTF
+      (gltf) => {
+        scene.add(gltf.scene);
+      },
+      (xhr) => {
+        console.log((xhr.loaded / xhr.total * 100) + '% завантажено');
+      },
+      (error) => {
+        console.error('Сталася помилка при завантаженні GLTF:', error);
+      }
+    );
+
 
 
 
