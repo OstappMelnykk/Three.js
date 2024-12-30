@@ -4,6 +4,10 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import {GUI} from 'dat.gui'
 
+/*
+    /addons/
+    /examples/jsm/
+*/
 
 @Component({
   selector: 'app-canvas-box',
@@ -91,33 +95,80 @@ export class CanvasBoxComponent implements OnInit
 //////////////////////////////////////////////////////////////////
 
 
-    const geometry = new THREE.BufferGeometry();
-
-    const vertices = new Float32Array( [
-      -1.0, -1.0,  1.0, // v0
-      1.0, -1.0,  1.0, // v1
-      1.0,  1.0,  1.0, // v2
-      -1.0,  1.0,  1.0, // v3
-    ] );
-
-    const indices = [
-      0, 1, 2,
-      2, 3, 0,
-    ];
-
-    geometry.setIndex( indices );
-    geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
-
-    const material = new THREE.MeshBasicMaterial( {
-      color: 0xff0000,
-      wireframe: true
-    });
-    const mesh = new THREE.Mesh( geometry, material );
-
-
-    scene.add( mesh );
+    // const geometry = new THREE.BufferGeometry();
+    //
+    // const vertices = new Float32Array( [
+    //   -1.0, -1.0,  1.0, // v0
+    //   1.0, -1.0,  1.0, // v1
+    //   1.0,  1.0,  1.0, // v2
+    //   -1.0,  1.0,  1.0, // v3
+    // ] );
+    //
+    // const indices = [
+    //   0, 1, 2,
+    //   2, 3, 0,
+    // ];
+    //
+    // geometry.setIndex( indices );
+    // geometry.setAttribute( 'position', new THREE.BufferAttribute( vertices, 3 ) );
+    //
+    // const material = new THREE.MeshBasicMaterial( {
+    //   color: 0xff0000,
+    //   wireframe: true
+    // });
+    // const mesh = new THREE.Mesh( geometry, material );
+    //
+    //
+    // scene.add( mesh );
 
 //////////////////////////////////////////////////////////////////
+
+
+    //додавання кольорів до вершин
+
+
+    const vertices = new Float32Array([
+      0, 1, 0,   // Верхня вершина
+      -1, -1, 0,  // Ліва нижня вершина
+      1, -1, 0   // Права нижня вершина
+    ]);
+
+// Кольори
+    const colors = new Float32Array([
+      1, 0, 0,  // Червоний (для верхньої вершини)
+      0, 1, 0,  // Зелений (для лівої вершини)
+      0, 0, 1   // Синій (для правої вершини)
+    ]);
+
+// Геометрія
+    const geometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+
+// Матеріал
+    const material = new THREE.MeshBasicMaterial({
+      vertexColors: true, // Використовувати кольори вершин
+      side: THREE.DoubleSide
+    });
+
+// Сітка
+    const triangle = new THREE.Mesh(geometry, material);
+    scene.add(triangle);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
