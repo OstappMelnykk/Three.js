@@ -44,44 +44,54 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const material = new THREE.MeshNormalMaterial({ side: THREE.DoubleSide })
-    const geometry = new THREE.BufferGeometry()
-    const points = [
-      new THREE.Vector3(-1, 1, -1), //c
-      new THREE.Vector3(-1, -1, 1), //b
-      new THREE.Vector3(1, 1, 1), //a
-
-      new THREE.Vector3(1, 1, 1), //a
-      new THREE.Vector3(1, -1, -1), //d
-      new THREE.Vector3(-1, 1, -1), //c
-
-      new THREE.Vector3(-1, -1, 1), //b
-      new THREE.Vector3(1, -1, -1), //d
-      new THREE.Vector3(1, 1, 1), //a
-
-      new THREE.Vector3(-1, 1, -1), //c
-      new THREE.Vector3(1, -1, -1), //d
-      new THREE.Vector3(-1, -1, 1) //b
-    ]
-
-    geometry.setFromPoints(points)
-    geometry.computeVertexNormals()
-
-    const mesh = new THREE.Mesh(geometry, material)
-    scene.add(mesh)
 
 
+    function twist(geometry: THREE.BufferGeometry, factor: number) {
+      const q = new THREE.Quaternion()
+      const up = new THREE.Vector3(0, 1, 0)
+      const p = geometry.attributes['position'].array
+
+      for (let i = 0; i < p.length; i += 3) {
+        q.setFromAxisAngle(up, p[i + 1] * factor)
+
+        let vec = new THREE.Vector3(p[i], p[i + 1], p[i + 2])
+        vec.applyQuaternion(q)
+
+        p[i] = vec.x
+        p[i + 2] = vec.z
+      }
+
+      geometry.computeVertexNormals()
+      geometry.attributes['position'].needsUpdate = true
+    }
+
+    let geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10)
+
+    twist(geometry, Math.PI / 2)
+
+    const twistedCube = new THREE.Mesh(
+      geometry,
+      new THREE.MeshNormalMaterial({ wireframe: true })
+    )
+
+    scene.add(twistedCube)
 
     const data = {
-      x: 1
+      t: Math.PI / 2
     }
 
     const gui = new GUI()
-    gui.add(data, 'x', -5, -1, 0.01).onChange(() => {
-      geometry.attributes['position'].array[3] = data.x
-      geometry.attributes['position'].needsUpdate = true
+    gui.add(data, 't', -Math.PI, Math.PI, 0.01).onChange((t) => {
+      twistedCube.geometry.dispose()
+      geometry = new THREE.BoxGeometry(1, 1, 1, 10, 10, 10)
+      twist(geometry, t)
+      twistedCube.geometry = geometry
     })
     gui.open()
+
+
+
+
 
 
 
