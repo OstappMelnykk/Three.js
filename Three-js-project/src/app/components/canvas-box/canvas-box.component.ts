@@ -2,9 +2,8 @@ import {Component, OnInit} from '@angular/core';
 import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
+import {TeapotGeometry} from "three/examples/jsm/geometries/TeapotGeometry.js";
 import {GUI} from 'dat.gui'
-import { ConvexGeometry } from 'three/examples/jsm/geometries/ConvexGeometry.js'
-
 
 /*
     /addons/
@@ -42,35 +41,13 @@ export class CanvasBoxComponent implements OnInit
     new OrbitControls(camera, renderer.domElement)
 
 
+// Створення геометрії чайника
+    const geometry = new TeapotGeometry(1, 8); // Розмір 1, кількість сегментів 8
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
 
-    // // Визначаємо набір точок для ConvexGeometry
-    // const points = [
-    //   new THREE.Vector3(-1, -1, 0),
-    //   new THREE.Vector3(1, -1, 0),
-    //   new THREE.Vector3(1, 1, 0),
-    //   new THREE.Vector3(-1, 1, 0),
-    //   new THREE.Vector3(0, 0, 2)
-    // ];
-
-    const points = [];
-    const numberOfPoints = 100;  // кількість точок
-
-    for (let i = 0; i < numberOfPoints; i++) {
-      const x = Math.random() * 10 - 5;  // Генерація випадкового x від -5 до 5
-      const y = Math.random() * 10 - 5;  // Генерація випадкового y від -5 до 5
-      const z = Math.random() * 10 - 5;  // Генерація випадкового z від -5 до 5
-      points.push(new THREE.Vector3(x, y, z));
-    }
-
-    const geometry = new ConvexGeometry( points );
-    //const material = new THREE.MeshNormalMaterial({wireframe: true});
-    const material = new THREE.MeshNormalMaterial({side: THREE.DoubleSide});
-    const mesh = new THREE.Mesh( geometry, material );
-    scene.add( mesh );
-
-
-
-
+// Створення об'єкта Mesh
+    const mesh = new THREE.Mesh(geometry, material);
+    scene.add(mesh);
 
 
     window.addEventListener('resize', () => {
