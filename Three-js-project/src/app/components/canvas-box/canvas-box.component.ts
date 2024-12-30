@@ -44,18 +44,56 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const points = [];
 
-    points.push(new THREE.Vector3(-1, -1, 0)); // Перша точка
-    points.push(new THREE.Vector3(1, -1, 0));  // Друга точка
-    points.push(new THREE.Vector3(1, 1, 0));   // Третя точка
-    points.push(new THREE.Vector3(-1, 1, 0));  // Четверта точка
 
-    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const vertices = new Float32Array([
+      -1, -1, 0,
+      1, -1, 0,
+      1, 1, 0,
+      1, 1, 1,
+    ]);
+
+    const indices = [
+      0, 1,
+      1, 2,
+      2, 3,
+    ];
+
+    const geometry : THREE.BufferGeometry = new THREE.BufferGeometry();
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
+    geometry.setIndex( indices );
+
     const material = new THREE.LineBasicMaterial({ color: 0x00ff00 });
 
-    const line = new THREE.Line(geometry, material);
-    scene.add(line);
+    const lines = new THREE.Line(geometry, material);
+    lines.position.set(0,0,-1);
+    scene.add(lines);
+
+
+    const gui = new GUI();
+
+    let pointsFolders = [];
+
+    for (let i = 0; i < vertices.length / 3; i++) {
+      const point = {
+        x: vertices[i * 3],
+        y: vertices[i * 3 + 1],
+        z: vertices[i * 3 + 2]
+      };
+
+      const folder = gui.addFolder(`Point ${i + 1}`);
+      pointsFolders.push(folder);
+
+      let position = geometry.attributes['position']
+
+      folder.add(point, "x", -10, 10).onChange(() => { vertices[i * 3] = point.x; position.needsUpdate = true; });
+      folder.add(point, "y", -10, 10).onChange(() => { vertices[i * 3 + 1] = point.y; position.needsUpdate = true;});
+      folder.add(point, "z", -10, 10).onChange(() => { vertices[i * 3 + 2] = point.z; position.needsUpdate = true; });
+      folder.open()
+    }
+
+
+
 
 
 
