@@ -178,14 +178,21 @@ export class CanvasBoxComponent implements OnInit
       2, 3, 4  // Правий нижній трикутник
     ];
 
-// Геометрія
+    const colors = new Float32Array([
+      1, 0, 0,
+      0, 1, 0,
+      0, 0, 1,
+      0, 0.5, 0,
+      0.5, 0, 0,
+    ]);
+
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
     geometry.setIndex(indices);
+    geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
 
-// Матеріал
     const material = new THREE.MeshBasicMaterial({
-      color: 0x00ff00,
+      vertexColors: true,
       side: THREE.DoubleSide
     });
 
