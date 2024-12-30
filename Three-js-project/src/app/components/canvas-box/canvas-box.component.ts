@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls.js";
 import Stats from "three/examples/jsm/libs/stats.module.js";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import {GUI} from 'dat.gui'
 
 
 /*
@@ -40,17 +41,12 @@ export class CanvasBoxComponent implements OnInit
 
     new OrbitControls(camera, renderer.domElement)
 
+
+
+
     const stats = new Stats()
     document.body.appendChild(stats.dom)
 
-
-
-
-
-
-
-
-// Створення форми (наприклад, прямокутник)
     const shape = new THREE.Shape();
     shape.moveTo(0, 0);
     shape.lineTo(0, 1);
@@ -58,10 +54,9 @@ export class CanvasBoxComponent implements OnInit
     shape.lineTo(1, 0);
     shape.lineTo(0, 0);
 
-// Налаштування екструзії
     const extrudeSettings = {
-      steps: 2,
-      depth: 1,
+      steps: 1,
+      depth: 2,
       bevelEnabled: true,
       bevelThickness: 0.2,
       bevelSize: 0.1,
@@ -69,11 +64,42 @@ export class CanvasBoxComponent implements OnInit
       bevelSegments: 1,
     };
 
-// Створення геометрії з екструзії
-    const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
-    const material = new THREE.MeshNormalMaterial({  });
-    const mesh = new THREE.Mesh(geometry, material);
+    const materialSettings = {
+      wireframe: true, // Значення для GUI
+    };
+
+    const material = new THREE.MeshNormalMaterial({wireframe:true});
+
+    function createExtrudedGeometry() {
+      const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      const mesh = new THREE.Mesh(geometry, material);
+      return mesh;
+    }
+
+    let mesh = createExtrudedGeometry();
     scene.add(mesh);
+
+    const gui = new GUI();
+
+    gui.add(extrudeSettings, 'steps', 1, 10).step(1).onChange(updateGeometry);
+    gui.add(extrudeSettings, 'depth', 0, 10).onChange(updateGeometry);
+    gui.add(extrudeSettings, 'bevelEnabled').onChange(updateGeometry);
+    gui.add(extrudeSettings, 'bevelThickness', -1, 3).onChange(updateGeometry);
+    gui.add(extrudeSettings, 'bevelSize', 0, 1).onChange(updateGeometry);
+    gui.add(extrudeSettings, 'bevelOffset', 0, 3).onChange(updateGeometry);
+    gui.add(extrudeSettings, 'bevelSegments', 1, 30).step(1).onChange(updateGeometry);
+
+    gui.add(materialSettings, 'wireframe').onChange(updateMaterial);
+
+    function updateGeometry() {
+      const newGeometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      mesh.geometry.dispose(); // Очистіть стару геометрію
+      mesh.geometry = newGeometry;
+    }
+
+    function updateMaterial() {
+      mesh.material.wireframe = materialSettings.wireframe; // Оновлюємо властивість material
+    }
 
 
 
