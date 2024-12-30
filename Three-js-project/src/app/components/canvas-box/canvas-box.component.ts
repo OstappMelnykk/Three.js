@@ -48,25 +48,28 @@ export class CanvasBoxComponent implements OnInit
 
 
 
-    const dynamicPositions = [
-      -1, -1, 0,
-      1, -1, 0,
-      1,  1, 0
-    ];
+    const geometry = new THREE.BufferGeometry();
+    const vertices = new Float32Array([
+      // Вершини точок
+      0, 0, 0,
+      1, 1, 1,
+      -1, -1, -1,
+    ]);
+    geometry.setAttribute('position', new THREE.BufferAttribute(vertices, 3));
 
-    const dynamicGeometry = new LineGeometry();
-    dynamicGeometry.setPositions(dynamicPositions);
-
-    const dynamicMaterial = new LineMaterial({
-      color: 0x00ff00,
-      linewidth: 3
+// Створення матеріалу для точок
+    const material = new THREE.PointsMaterial({
+      color: 0x00ff00, // зелений колір
+      size: 0.1, // розмір точок
+      transparent: true, // прозорість
+      blending: THREE.AdditiveBlending, // режим змішування
+      depthTest: false, // вимкнення тесту глибини
+      sizeAttenuation: true, // зміна розміру точок залежно від відстані
     });
 
-    dynamicMaterial.resolution.set(window.innerWidth, window.innerHeight);
-
-    const dynamicLine = new Line2(dynamicGeometry, dynamicMaterial);
-    scene.add(dynamicLine);
-
+// Створення об'єкта точок
+    const points = new THREE.Points(geometry, material);
+    scene.add(points);
 
 
 
@@ -80,8 +83,6 @@ export class CanvasBoxComponent implements OnInit
     function animate() {
       requestAnimationFrame(animate)
       renderer.render(scene, camera)
-      dynamicPositions[3] = Math.sin(Date.now() * 0.001) * 2; // Коливаємо точку
-      dynamicGeometry.setPositions(dynamicPositions);
       stats.update()
     }
     animate()
